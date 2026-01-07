@@ -121,7 +121,7 @@
           id="addSupplyRowBtn"
           class="flex-1 bg-green-600 text-white py-2 rounded text-sm font-bold"
         >
-          + إضافة صف مصنعيات
+          + إضافة صف توريدات
         </button>
       </div>
 
@@ -131,7 +131,7 @@
           id="supplySupervisionBtn"
           class="flex-1 bg-green-800 text-white py-2 rounded text-sm font-bold"
         >
-          + إضافة نسبة إشراف (مصنعيات)
+          + إضافة نسبة إشراف (توريدات)
         </button>
       </div>
 
@@ -219,7 +219,7 @@
               ></p>
             </div>
             <h3 class="font-bold text-[var(--dark)] mb-2 text-center text-sm">
-              مستخلص ( مصنعيات )
+              مستخلص ( توريدات )
             </h3>
             <table class="w-full text-center text-xs">
               <thead class="bg-[var(--dark-blue)]">
@@ -326,7 +326,7 @@
               class="grid grid-cols-2 gap-3 text-sm font-bold max-w-md mx-auto"
             >
               <div class="text-right">
-                <p class="mb-1">اجمالي المصنعيات</p>
+                <p class="mb-1">اجمالي التوريدات</p>
               </div>
               <div class="text-left">
                 <p class="mb-1" id="summarySupplies">0</p>
@@ -594,7 +594,50 @@
         calculateTotals();
       });
 
+      // function downloadPDF() {
+      //   // تحديد العنصر المراد تحويله
+      //   const element = document.querySelector(".printable");
 
+      //   // زر التحميل
+      //   const btn = document.querySelector('button[onclick="downloadPDF()"]');
+      //   const originalContent = btn.innerHTML;
+      //   // تغيير حالة الزر
+      //   btn.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> جاري التحميل...`;
+      //   btn.disabled = true;
+
+      //   // إعدادات التحويل
+      //   const opt = {
+      //     margin: [0.1, 0, 0.1, 0], // هوامش: علوي، أيمن، سفلي، أيسر (بالبوصة)
+      //     filename:
+      //       "مستخلص_" + document.getElementById("extractTitle").value ||
+      //       "contractor_abstract" + ".pdf",
+      //     image: { type: "jpeg", quality: 0.98 },
+      //     html2canvas: {
+      //       scale: 2, // زيادة الدقة
+      //       useCORS: true, // للسماح بتحميل الصور من نطاقات أخرى
+      //       logging: false,
+      //       scrollY: 0,
+      //     },
+      //     jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+      //   };
+
+      //   // التنفيذ
+      //   html2pdf()
+      //     .set(opt)
+      //     .from(element)
+      //     .save()
+      //     .then(() => {
+      //       // استعادة الزر بعد الانتهاء
+      //       btn.innerHTML = originalContent;
+      //       btn.disabled = false;
+      //     })
+      //     .catch((err) => {
+      //       console.error(err);
+      //       alert("حدث خطأ أثناء إنشاء ملف PDF");
+      //       btn.innerHTML = originalContent;
+      //       btn.disabled = false;
+      //     });
+      // }
       function downloadPDF() {
         // تحديد العنصر المراد تحويله
         const element = document.querySelector(".printable");
