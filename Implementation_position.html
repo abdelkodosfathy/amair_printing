@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
-    <title>مستخلص توريدات</title>
+    <title>مستخلص المقاول</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
@@ -92,18 +92,15 @@
             class="w-full border rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--dark-blue)]"
           />
         </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1">تاريخ التسليم</label>
+          <input
+            id="apply_date"
+            type="date"
+            class="w-full border rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--dark-blue)]"
+          />
+        </div>
       </div>
-
-      <div class="mb-3">
-        <label class="block text-xs font-semibold mb-1">المكان</label>
-        <input
-          id="location"
-          type="text"
-          placeholder="المنطقة والحي والمدينة"
-          class="w-full border rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--dark-blue)]"
-        />
-      </div>
-
 
       <div class="mb-3">
         <label class="block text-xs font-semibold mb-1">عنوان المستخلص</label>
@@ -116,23 +113,15 @@
       </div>
 
       <div class="flex gap-2">
-        <!-- onclick="addSupplyRow()" -->
         <button
           id="addSupplyRowBtn"
           class="flex-1 bg-green-600 text-white py-2 rounded text-sm font-bold"
         >
-          + إضافة صف توريدات
+          + إضافة صف
         </button>
       </div>
 
       <div class="flex gap-2 mt-2">
-        <!-- onclick="toggleSupplySupervision()" -->
-        <button
-          id="supplySupervisionBtn"
-          class="flex-1 bg-green-800 text-white py-2 rounded text-sm font-bold"
-        >
-          + إضافة نسبة إشراف (توريدات)
-        </button>
       </div>
 
       <div class="flex gap-2 mt-3 pt-3 border-t border-gray-300">
@@ -140,7 +129,7 @@
           onclick="window.print()"
           class="flex-1 bg-[var(--dark)] text-white py-2 rounded text-sm font-bold"
         >
-          طباعة المستخلص
+          طباعة 
         </button>
 
         <button
@@ -181,15 +170,6 @@
             <p class="font-semibold">
               التاريخ: <span id="displayDate">--/--/----</span>
             </p>
-            <div class="w-full space-y-2">
-              <p class="font-bold flex-1">
-                المكان: <span id="displayLocation"></span>
-              </p>
-              <p
-                class="mt-4 font-bold text-center flex-1 text-[var(--dark)]"
-                id="displayExtractTitle"
-              ></p>
-            </div>
           </div>
         </div>
 
@@ -205,21 +185,14 @@
               ></p>
             </div>
             <div class="font-bold flex items-center p-2">
-              <p class="ml-2">اسم المورّد</p>
-              <p
-                contenteditable="true"
-                class="outline-none bg-gray-200 min-w-20"
-              ></p>
-            </div>
-            <div class="font-bold flex items-center p-2">
-              <p class="ml-2">رقم التليفون</p>
+              <p class="ml-2">رقم القطعة</p>
               <p
                 contenteditable="true"
                 class="outline-none bg-gray-200 min-w-20"
               ></p>
             </div>
             <h3 class="font-bold text-[var(--dark)] mb-2 text-center text-sm">
-              مستخلص ( توريدات )
+              موقف تنفيذي
             </h3>
             <table class="w-full text-center text-xs">
               <thead class="bg-[var(--dark-blue)]">
@@ -227,13 +200,16 @@
                   <th class="border border-white text-white p-1.5 w-8">م</th>
                   <th class="border border-white text-white p-1.5">البند</th>
                   <th class="border border-white text-white p-1.5 w-16">
-                    الكمية
-                  </th>
-                  <th class="border border-white text-white p-1.5 w-16">
                     الوحدة
                   </th>
                   <th class="border border-white text-white p-1.5 w-16">
-                    السعر
+                    الكمية
+                  </th>
+                  <th class="border border-white text-white p-1.5 w-16">
+                    التكلفة
+                  </th>
+                  <th class="border border-white text-white p-1.5 w-16">
+                    فروق الاسعار
                   </th>
                   <th class="border border-white text-white p-1.5 w-16">
                     الإجمالي
@@ -248,15 +224,21 @@
                     -
                   </td>
                   <td class="border border-gray-300 p-1" contenteditable="true">
-                    0
-                  </td>
-                  <td class="border border-gray-300 p-1" contenteditable="true">
                     -
                   </td>
                   <td class="border border-gray-300 p-1" contenteditable="true">
                     0
                   </td>
+                  <td class="border border-gray-300 p-1" contenteditable="true">
+                    0
+                  </td>
                   <td
+                    class="border border-gray-300 p-1 font-semibold bg-gray-50"
+                  >
+                    0
+                  </td>
+                  <td
+                    contenteditable="true"
                     class="border border-gray-300 p-1 font-semibold bg-gray-50"
                   >
                     0
@@ -278,40 +260,9 @@
                     الإجمالي
                   </td>
                   <td
-                    colspan="5"
+                    colspan="6"
                     class="border border-white p-2 font-bold"
                     id="suppliesTotal"
-                  >
-                    0
-                  </td>
-                </tr>
-                <tr class="bg-gray-100">
-                  <td
-                    colspan="2"
-                    class="border border-white p-2 font-bold text-right"
-                  >
-                    المدفوع
-                  </td>
-                  <td
-                    colspan="5"
-                    class="border border-white p-2 font-bold"
-                    id="suppliesPayed"
-                    contenteditable="true"
-                  >
-                    0
-                  </td>
-                </tr>
-                <tr class="bg-[var(--dark-blue)] text-white">
-                  <td
-                    colspan="2"
-                    class="border border-white p-2 font-bold text-right"
-                  >
-                    المتبقي
-                  </td>
-                  <td
-                    colspan="5"
-                    class="border border-white p-2 font-bold"
-                    id="suppliesRemaining"
                   >
                     0
                   </td>
@@ -326,18 +277,8 @@
               class="grid grid-cols-2 gap-3 text-sm font-bold max-w-md mx-auto"
             >
               <div class="text-right">
-                <p class="mb-1">اجمالي التوريدات</p>
+                <p class="mb-1">تاريخ تسليم المشروع</p>
               </div>
-              <div class="text-left">
-                <p class="mb-1" id="summarySupplies">0</p>
-              </div>
-
-              <!-- <div class="text-right">
-                <p class="mb-1">الإجمالى</p>
-              </div>
-              <div class="text-left">
-                <p class="mb-1" id="grandTotal">0</p>
-              </div> -->
             </div>
           </div>
 
