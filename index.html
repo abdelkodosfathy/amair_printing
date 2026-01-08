@@ -89,6 +89,7 @@
           <input
             id="date"
             type="date"
+            lang="ar"
             class="w-full border rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--dark-blue)]"
           />
         </div>
@@ -104,7 +105,6 @@
         />
       </div>
 
-
       <div class="mb-3">
         <label class="block text-xs font-semibold mb-1">عنوان المستخلص</label>
         <input
@@ -116,12 +116,17 @@
       </div>
 
       <div class="flex gap-2">
-        <!-- onclick="addSupplyRow()" -->
         <button
           id="addSupplyRowBtn"
-          class="flex-1 bg-green-600 text-white py-2 rounded text-sm font-bold"
+          class="flex-1 bg-green-800 text-white py-2 rounded text-sm font-bold"
         >
           + إضافة صف مصنعيات
+        </button>
+        <button
+          id="removeRowBtn"
+          class="flex-1 bg-red-700 text-white py-2 rounded text-sm font-bold"
+        >
+          حذف صفوف
         </button>
       </div>
 
@@ -198,7 +203,7 @@
           <!-- جدول التوريدات -->
           <div>
             <div class="font-bold flex items-center p-2">
-              <p class="ml-2">اسم المشروع </p>
+              <p class="ml-2">اسم المشروع</p>
               <p
                 contenteditable="true"
                 class="outline-none bg-gray-200 min-w-20"
@@ -256,14 +261,10 @@
                   <td class="border border-gray-300 p-1" contenteditable="true">
                     0
                   </td>
-                  <td
-                    class="border border-gray-300 p-1 font-semibold bg-gray-50"
-                  >
-                    0
-                  </td>
+                  <td class="border border-gray-300 p-1 font-semibold">0</td>
                   <td
                     contenteditable="true"
-                    class="border border-gray-300 p-1 font-semibold bg-gray-50"
+                    class="border border-gray-300 p-1 font-semibold"
                   >
                     -
                   </td>
@@ -331,13 +332,6 @@
               <div class="text-left">
                 <p class="mb-1" id="summarySupplies">0</p>
               </div>
-
-              <!-- <div class="text-right">
-                <p class="mb-1">الإجمالى</p>
-              </div>
-              <div class="text-left">
-                <p class="mb-1" id="grandTotal">0</p>
-              </div> -->
             </div>
           </div>
 
@@ -379,8 +373,81 @@
           "supplySupervisionBtn"
         );
 
-
         const addSupplyRowBtn = document.getElementById("addSupplyRowBtn");
+        const removeRowBtn = document.getElementById("removeRowBtn");
+
+        let isRemoving = false;
+        /* Remove Rows */
+        removeRowBtn.addEventListener("click", function (e) {
+          const tbody = document.getElementById("suppliesBody");
+          const normalRowsCount = tbody.querySelectorAll(
+            "tr:not([data-supervision])"
+          ).length;
+
+          // التحقق من وجود أكثر من صف واحد
+          if (normalRowsCount <= 1 && !isRemoving) {
+            alert("يجب إضافة صفوف أولاً");
+            return;
+          }
+
+          if (!isRemoving) {
+            isRemoving = true;
+            removeRowBtn.classList.remove("bg-red-700");
+            removeRowBtn.classList.add("bg-red-500");
+            removeRowBtn.textContent = "اضغط على الصفوف لحذفها";
+
+            // إضافة مستمعات الحذف لكل الصفوف
+            const rows = document.querySelectorAll(
+              "#suppliesBody tr:not([data-supervision])"
+            );
+            rows.forEach((row) => {
+              row.style.cursor = "pointer";
+              row.classList.add("delete-mode", "hover:bg-red-200");
+              row.addEventListener("click", deleteRowHandler);
+            });
+          } else {
+            isRemoving = false;
+            removeRowBtn.classList.remove("bg-red-500");
+            removeRowBtn.classList.add("bg-red-700");
+            removeRowBtn.textContent = "حذف صفوف";
+
+            // إزالة مستمعات الحذف
+            const rows = document.querySelectorAll("#suppliesBody tr");
+            rows.forEach((row) => {
+              row.style.cursor = "default";
+              row.classList.remove("delete-mode", "hover:bg-red-200");
+              row.removeEventListener("click", deleteRowHandler);
+            });
+          }
+        });
+
+        function deleteRowHandler(e) {
+          if (!isRemoving) return;
+
+          const row = e.currentTarget;
+          const tbody = document.getElementById("suppliesBody");
+
+          // التأكد من وجود صف واحد على الأقل
+          if (
+            tbody.querySelectorAll("tr:not([data-supervision])").length <= 1
+          ) {
+            alert("يجب الاحتفاظ بصف واحد على الأقل");
+            return;
+          }
+
+          row.remove();
+
+          // إعادة ترقيم الصفوف
+          const normalRows = tbody.querySelectorAll(
+            "tr:not([data-supervision])"
+          );
+          normalRows.forEach((r, index) => {
+            r.cells[0].textContent = index + 1;
+          });
+
+          supplyRowCount = normalRows.length;
+          calculateTotals();
+        }
 
         /* ========= DATE ========= */
         const dateInput = document.getElementById("date");
@@ -390,7 +457,18 @@
           dateInput.addEventListener("change", function (e) {
             if (e.target.value) {
               const d = new Date(e.target.value);
-              displayDate.textContent = d.toLocaleDateString("ar-EG");
+
+              const numericDate = d.toLocaleDateString("ar-EG", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              });
+
+              const monthName = d.toLocaleDateString("ar-EG", {
+                month: "long",
+              });
+
+              displayDate.textContent = `${numericDate} (${monthName})`;
             } else {
               displayDate.textContent = "--/--/----";
             }
@@ -438,7 +516,7 @@
           <td class="border p-1" contenteditable="true">0</td>
           <td class="border p-1" contenteditable="true">-</td>
           <td class="border p-1" contenteditable="true">0</td>
-          <td class="border p-1 bg-gray-50 font-semibold">0</td>
+          <td class="border p-1 font-semibold">0</td>
           <td class="border p-1" contenteditable="true">-</td>
         `;
 
@@ -453,7 +531,6 @@
           calculateTotals();
         }
         addSupplyRowBtn.addEventListener("click", addSupplyRow);
-
 
         /* ===================== SUPERVISION ===================== */
         function toggleSupplySupervision() {
@@ -485,7 +562,6 @@
         }
         supplySupervisionBtn.addEventListener("click", toggleSupplySupervision);
 
-       
         /* ===================== CALCULATION ===================== */
 
         function calculateRow(row) {
@@ -593,7 +669,6 @@
 
         calculateTotals();
       });
-
 
       function downloadPDF() {
         // تحديد العنصر المراد تحويله
